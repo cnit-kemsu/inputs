@@ -1,6 +1,6 @@
 import React, { createElement } from 'react';
 import ReactDOM from 'react-dom';
-import { useForm, useCompound, useFieldArray, useFormStatus, useUIBlocker } from '@implicit/form';
+import { useForm, useCompound, useFieldArray, useFormStatus, useUIBlocker } from '@kemsu/form';
 import TextField from '../src/inputs/TextField';
 
 function validateForm({ firstname, data }) {
