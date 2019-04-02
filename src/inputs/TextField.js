@@ -1,6 +1,6 @@
 import React, { createElement } from 'react';
 import MuiTextField from '@material-ui/core/TextField';
-import { useField } from '@implicit/form';
+import { useField } from '@kemsu/form';
 
 function TextField({comp, name, validate,
   helperText, multiline, variant, margin, ...props}) {

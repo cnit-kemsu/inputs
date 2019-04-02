@@ -11,9 +11,7 @@
     "node_modules/**/*.js"
   ],
   "peerDependencies": {
-    "@implicit/force-update": "github:cnit-kemsu/force-update",
-    "@implicit/publisher": "github:cnit-kemsu/publisher",
-    "@implicit/form": "github:cnit-kemsu/form",
+    "@kemsu/form": "github:cnit-kemsu/form",
     "@material-ui/core": "^4.0.0-alpha.5",
     "@material-ui/icons": "^4.0.0-alpha.1",
     "@material-ui/styles": "^4.0.0-alpha.5",
@@ -30,9 +28,7 @@
     "@babel/plugin-proposal-private-methods": "^7.3.4",
     "@babel/preset-env": "^7.3.4",
     "@babel/preset-react": "^7.0.0",
-    "@implicit/force-update": "github:cnit-kemsu/force-update",
-    "@implicit/form": "github:cnit-kemsu/form",
-    "@implicit/publisher": "github:cnit-kemsu/publisher",
+    "@kemsu/form": "github:cnit-kemsu/form",
     "@material-ui/core": "^4.0.0-alpha.5",
     "@material-ui/icons": "^4.0.0-alpha.1",
     "@material-ui/styles": "^4.0.0-alpha.5",
