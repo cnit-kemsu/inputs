@@ -1,7 +1,9 @@
 import React, { createElement } from 'react';
 import ReactDOM from 'react-dom';
-import { useForm, useCompound, useFieldArray, useFormStatus, useUIBlocker } from '@kemsu/form';
+import { useForm, useCompound, useFieldArray, useFormStatus } from '@kemsu/form';
 import TextField from '../src/inputs/TextField';
+import Select from '../src/inputs/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 function validateForm({ firstname, data }) {
   if (firstname && data?.address?.city)
@@ -162,11 +164,18 @@ const initialize = () => ({
 function App() {
 
   console.log('render App');
-  const form = useForm(handleSubmit, initialize, validateForm);
-  useUIBlocker(form);
+  const form = useForm(handleSubmit, validateForm, initialize);
 
   return (
     <div>
+      <div>
+        <Select label="Lalala" comp={form} name="lalala">
+          <MenuItem value="">Не выбрано</MenuItem>
+          <MenuItem value="1">111</MenuItem>
+          <MenuItem value="2">2</MenuItem>
+          <MenuItem value="3">3</MenuItem>
+        </Select>
+      </div>
       <div>
         <TextField label="Firstname" comp={form} name="firstname" validate={validateFirstname}/>
       </div>
@@ -177,7 +186,7 @@ function App() {
        <Password comp={form} />
       </div>
       <div>
-        <Friends comp={form}/>
+        <Friends comp={form} />
       </div>
       <div>
         <SubmitErrors comp={form} />
