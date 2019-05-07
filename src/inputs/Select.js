@@ -17,27 +17,15 @@ function Select({comp, name, validate,
   const { value, error, touched, dirty, onChange, onBlur } = useField(comp, name, validate, getValue);
   const showError = touched && dirty && Boolean(error);
 
-  return <FormControl variant={variant || 'filled'} onBlur={onBlur} margin={margin || 'dense'} {...props}>
+  return <FormControl error={showError} variant={variant || 'filled'} onBlur={onBlur} margin={margin || 'dense'} {...props}>
     {label !== undefined && <InputLabel>{label}</InputLabel>}
-    <MuiSelect value={value || ''}
+    <MuiSelect error={showError} value={value || ''}
       onChange={onChange}
       input={<FilledInput />}
       children={children}
     />
-    {showError && <FormHelperText>{showError ? error : helperText}</FormHelperText>}
+    {showError && <FormHelperText error={showError}>{showError ? error : helperText}</FormHelperText>}
   </FormControl>;
-
-  // return createElement(MuiTextField, {
-  //   value: value || '',
-  //   onChange: onChange,
-  //   onBlur: onBlur,
-  //   error: showError,
-  //   helperText: showError ? error : helperText,
-  //   multiline: multiline,
-  //   variant: variant || multiline ? 'outlined' : 'filled',
-  //   margin: margin || 'dense',
-  //   ...props
-  // });
 }
 
 export default React.memo(Select);
