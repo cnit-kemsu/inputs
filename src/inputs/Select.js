@@ -10,8 +10,8 @@ function getValue(event) {
   return event.target.value;
 }
 
-function Select({comp, name, validate,
-  helperText, variant, margin, children, label, ...props}) {
+function Select({ comp, name, validate,
+  helperText, variant, margin, children, label, ...props }) {
 
   const { value, error, touched, dirty, onChange, onBlur } = useField(comp, name, validate, getValue);
   const showError = touched && dirty && Boolean(error);

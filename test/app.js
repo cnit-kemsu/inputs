@@ -1,8 +1,10 @@
 import React, { createElement } from 'react';
 import ReactDOM from 'react-dom';
-import { useForm, useCompound, useFieldArray, useFormStatus } from '@kemsu/form';
+import { useForm, useComposite, useFieldArray, useFormSubscriber, Fields } from '@kemsu/form';
 import TextField from '../src/inputs/TextField';
 import Select from '../src/inputs/Select';
+import DateTimePicker from '../src/inputs/DateTimePicker';
+import PickersUtilsProvider from '../src/PickersUtilsProvider';
 import MenuItem from '@material-ui/core/MenuItem';
 
 function validateForm({ firstname, data }) {
@@ -29,9 +31,10 @@ function validateCity(value) {
   return undefined;
 }
 
-function validatePassword({ original, confirm } = {}) {
-  if (original && confirm) {
-    if (original !== confirm) return [
+function validatePasswords(values) {
+  if (values) {
+    const { password, confirmPassword } = values;
+    if (password !== confirmPassword) return [
       undefined,
       'Passwords must be identical'
     ];
@@ -39,19 +42,31 @@ function validatePassword({ original, confirm } = {}) {
   return undefined;
 }
 
-function validateOriginalPassword(originalPassword) {
-  if (originalPassword && originalPassword.length < 5) return 'Password must contain more than 5 characters';
+/**
+ * 
+ * @param {Date} value 
+ */
+function validateDate(value) {
+  if (value) {
+    if (value.getFullYear() === 2019) return 'Invalid year';
+  }
   return undefined;
 }
 
-function validateFirends(friends) {
+function validatePassword(password) {
+  if (password && password.length < 5) return 'Password must contain more than 5 characters';
+  return undefined;
+}
+
+function validateFriends(friends) {
   if (friends?.length < 2) return [undefined, 'There must be at least 2 friends'];
   return undefined; 
 }
 
-function Password({ comp }) {
+function Passwords({ comp }) {
 
-  const [composer, { error, touched, dirty, onBlur }] = useCompound(comp, 'data.password', validatePassword);
+  console.log('render Passwords');
+  const [passwords, { error, touched, dirty, onBlur }] = useComposite(comp, 'data.passwords', validatePasswords);
 
   return (
     <div onBlur={onBlur} style={{ padding: '5px', margin: '5px', width: 'fit-content', border: '2px solid black' }}>
@@ -59,12 +74,8 @@ function Password({ comp }) {
         touched: {touched ? 'true' : 'false'}, dirty: {dirty ? 'true' : 'false'}
       </div>
       <div>
-        <div>
-          <TextField label="Password" comp={composer} name="original" validate={validateOriginalPassword}/>
-        </div>
-        <div>
-          <TextField label="Confirm password" comp={composer} name="confirm" />
-        </div>
+        <TextField comp={passwords} label="Password" name="password" validate={validatePassword}/>
+        <TextField comp={passwords} label="Confirm password" name="confirmPassword" />
       </div>
       <div>
         {error && <div style={touched && dirty ? { color: 'red' } : {}}>{error}</div>}
@@ -72,28 +83,30 @@ function Password({ comp }) {
     </div>
   );
 }
-Password = React.memo(Password);
+Passwords = React.memo(Passwords);
 
-function Friend({ element }) {
+function FriendItem({ comp: friend }) {
 
-  console.log('render Friend:', element.composer.name);
+  console.log('render Friend:', friend.index);
   
   return (
     <div style={{ padding: '5px', margin: '5px', border: '2px solid black', width: 'fit-content' }}>
       <div style={{ display: 'flex' }}>
-        <TextField style={{ marginRight: '8px' }} label="Firstname" comp={element.composer} name="firstname" />
-        <TextField label="Lastname" comp={element.composer} name="lastname" />
+        <Fields comp={friend}>
+          <TextField label="Firstname" name="firstname" />
+          <TextField label="Lastname" name="lastname" />
+        </Fields>
       </div>
-      <button data-control onClick={element.delete}>Delete</button>
+      <button data-control onClick={friend.delete}>Delete</button>
     </div>
   );
 }
-Friend = React.memo(Friend);
+FriendItem = React.memo(FriendItem);
 
 function Friends({ comp }) {
 
   console.log('render Friends');
-  const [{ map, push }, { error, dirty, touched, onBlur }] = useFieldArray(comp, 'friends', validateFirends);
+  const [, { map, push, error, dirty, touched, onBlur }] = useFieldArray(comp, 'friends', validateFriends);
 
   return (
     <div onBlur={onBlur} style={{ padding: '10px', border: '3px solid black', width: 'fit-content' }}>
@@ -101,8 +114,8 @@ function Friends({ comp }) {
         touched: {touched ? 'true' : 'false'}, dirty: {dirty ? 'true' : 'false'}
       </div>
       <div>
-        {map(element => (
-            <Friend key={element.key} element={element} />
+        {map((key, friend) => (
+            <FriendItem key={key} comp={friend} />
         ))}
       </div>
       {error && <div style={touched && dirty ? { color: 'red' } : {}}>{error}</div>}
@@ -117,29 +130,25 @@ Friends = React.memo(Friends);
 function ResetButton({ comp }) {
 
   console.log('render ResetButton');
-  const { dirty } = useFormStatus(comp);
+  const { dirty, reset } = useFormSubscriber(comp);
   
-  return (
-    <button data-control disabled={!dirty} onClick={comp.reset}>Reset</button>
-  );
+  return <button data-control disabled={!dirty} onClick={reset}>Reset</button>;
 }
 ResetButton = React.memo(ResetButton);
 
 function SubmitButton({ comp }) {
 
   console.log('render SubmitButton');
-  const { hasErrors, touched } = useFormStatus(comp);
+  const { hasErrors, touched, submit } = useFormSubscriber(comp);
   
-  return (
-    <button data-control disabled={hasErrors && touched} onClick={comp.submit}>Submit</button>
-  );
+  return <button data-control disabled={hasErrors && touched} onClick={submit}>Submit</button>;
 }
 SubmitButton = React.memo(SubmitButton);
 
 function SubmitErrors({ comp }) {
 
-  console.log('render SubmitButton');
-  const { submitErrors } = useFormStatus(comp);
+  console.log('render SubmitErrors');
+  const { submitErrors } = useFormSubscriber(comp);
   
   return <div style={{ color: 'red' }}>{submitErrors}</div>;
 }
@@ -151,56 +160,62 @@ async function handleSubmit(values) {
   if (values.firstname === 'John') return 'John is invalid firstname';
 }
 
-const initialize = () => ({
+const initValues = {
   firstname: 'John',
   friends: [
     {
       firstname: 'John',
       lastname: 'Cooper'
     }
-  ]
-});
+  ],
+  date: '2019-06-11 15:18:00'
+};
 
 function App() {
 
   console.log('render App');
-  const form = useForm(handleSubmit, validateForm, initialize);
+  const form = useForm(handleSubmit, initValues, validateForm);
 
   return (
-    <div>
+    <Fields comp={form}>
       <div>
-        <Select label="Lalala" comp={form} name="lalala">
+        <Select label="Select" name="select">
           <MenuItem value="">Не выбрано</MenuItem>
-          <MenuItem value="1">111</MenuItem>
+          <MenuItem value="1">1</MenuItem>
           <MenuItem value="2">2</MenuItem>
           <MenuItem value="3">3</MenuItem>
         </Select>
       </div>
       <div>
-        <TextField label="Firstname" comp={form} name="firstname" validate={validateFirstname}/>
+        <DateTimePicker label="Date" name="date" validate={validateDate} />
       </div>
       <div>
-        <TextField label="City" comp={form} name="data.address.city" validate={validateCity}/>
+        <TextField label="Firstname" name="firstname" validate={validateFirstname} />
       </div>
       <div>
-       <Password comp={form} />
+        <TextField label="City" name="data.address.city" validate={validateCity}/>
       </div>
       <div>
-        <Friends comp={form} />
+       <Passwords />
       </div>
       <div>
-        <SubmitErrors comp={form} />
+        <Friends />
+      </div>
+      <div>
+        <SubmitErrors />
       </div>
       <div style={{ display: 'flex', padding: '10px' }}>
-        <ResetButton style={{ margin: '5px' }} comp={form} />
-        <SubmitButton style={{ margin: '5px' }} comp={form} />
+        <ResetButton style={{ margin: '5px' }} />
+        <SubmitButton style={{ margin: '5px' }} />
       </div>
-    </div>
+    </Fields>
   );
 }
 
 const root = () => (
-  <App />
+  <PickersUtilsProvider>
+    <App />
+  </PickersUtilsProvider>
 );
 
 ReactDOM.render(

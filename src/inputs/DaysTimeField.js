@@ -10,11 +10,11 @@ function TextField({ comp, name, validate,
 
   return createElement(MuiTextField, {
     value: value || '',
-    onChange: onChange,
-    onBlur: onBlur,
+    onChange,
+    onBlur,
     error: showError,
     helperText: showError ? error : helperText,
-    multiline: multiline,
+    multiline,
     variant: variant || multiline ? 'outlined' : 'filled',
     margin: margin || 'dense',
     ...props
