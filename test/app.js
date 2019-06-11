@@ -4,6 +4,7 @@ import { useForm, useComposite, useFieldArray, useFormSubscriber, Fields } from 
 import TextField from '../src/inputs/TextField';
 import Select from '../src/inputs/Select';
 import DateTimePicker from '../src/inputs/DateTimePicker';
+import DaysTimeField from '../src/inputs/DaysTimeField';
 import PickersUtilsProvider from '../src/PickersUtilsProvider';
 import MenuItem from '@material-ui/core/MenuItem';
 
@@ -38,6 +39,13 @@ function validatePasswords(values) {
       undefined,
       'Passwords must be identical'
     ];
+  }
+  return undefined;
+}
+
+function validateDaystime({ days, hours, minutes }) {
+  if (days === 0 && hours === 0 && minutes === 0) {
+    return 'Необходимо указать временной промежуток';
   }
   return undefined;
 }
@@ -178,6 +186,9 @@ function App() {
 
   return (
     <Fields comp={form}>
+      <div>
+        <DaysTimeField label="Daystime" name="daystime" validate={validateDaystime} />
+      </div>
       <div>
         <Select label="Select" name="select">
           <MenuItem value="">Не выбрано</MenuItem>

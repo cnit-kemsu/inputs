@@ -58,6 +58,7 @@
   },
   "dependencies": {
     "@date-io/date-fns": "^1.3.6",
-    "date-fns": "^2.0.0-alpha.31"
+    "date-fns": "^2.0.0-alpha.31",
+    "react-text-mask": "^5.4.3"
   }
 }
