@@ -23,7 +23,7 @@ function DaysTimeMaskInput({ inputRef, ...props }) {
 
 function parseDaysTime(value = '00 00:00') {
   return {
-    days: value.substring(0, 1) |> Number,
+    days: value.substring(0, 2) |> Number,
     hours: value.substring(3, 5) |> Number,
     minutes: value.substring(6, 8) |> Number
   };
