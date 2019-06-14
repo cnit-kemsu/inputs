@@ -2,6 +2,7 @@ import React, { createElement } from 'react';
 import ReactDOM from 'react-dom';
 import { useForm, useComposite, useFieldArray, useFormSubscriber, Fields } from '@kemsu/form';
 import TextField from '../src/inputs/TextField';
+import Checkbox from '../src/inputs/Checkbox';
 import Select from '../src/inputs/Select';
 import DateTimePicker from '../src/inputs/DateTimePicker';
 import DaysTimeField from '../src/inputs/DaysTimeField';
@@ -188,6 +189,9 @@ function App() {
     <Fields comp={form}>
       <div>
         <DaysTimeField label="Daystime" name="daystime" validate={validateDaystime} />
+      </div>
+      <div>
+        <Checkbox label="Cheked" name="cheked" />
       </div>
       <div>
         <Select label="Select" name="select">

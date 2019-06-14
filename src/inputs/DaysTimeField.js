@@ -29,7 +29,8 @@ function parseDaysTime(value = '00 00:00') {
   };
 }
 
-function validateDaysTime({ hours, minutes }) {
+function validateDaysTime({ days, hours, minutes }) {
+  if (days > 33) return 'Первышено максимальное количество дней';
   if (hours > 23) return 'Указано неверное количество часов';
   if (minutes > 59) return 'Указано неверное количество минут';
 }
