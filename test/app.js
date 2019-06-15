@@ -205,6 +205,9 @@ function App() {
         <DateTimePicker label="Date" name="date" validate={validateDate} />
       </div>
       <div>
+        <DateTimePicker label="Date 2" name="date2" validate={validateDate} />
+      </div>
+      <div>
         <TextField label="Firstname" name="firstname" validate={validateFirstname} />
       </div>
       <div>
