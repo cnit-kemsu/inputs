@@ -12,7 +12,7 @@ function TextField({ comp, name, validate,
   helperText, multiline, variant, margin,
   type, ...props }) {
 
-  const { value, error, touched, dirty, onChange, onBlur } = useField(comp, name, validate, type === 'Number' ? getNumberValue : undefined);
+  const { value, error, touched, dirty, onChange, onBlur } = useField(comp, name, validate, type === 'number' ? getNumberValue : undefined);
   const showError = touched && dirty && Boolean(error);
 
   return createElement(MuiTextField, {
