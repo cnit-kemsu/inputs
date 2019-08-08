@@ -14,7 +14,7 @@ function Checkbox({ comp, name, validate, ...props }) {
     onChange={onChange}
     onBlur={onBlur}
     {...props}
-  />
+  />;
 }
 
 export default React.memo(Checkbox);

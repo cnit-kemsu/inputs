@@ -5,8 +5,9 @@ import TextField from '../src/inputs/TextField';
 import Checkbox from '../src/inputs/Checkbox';
 import Select from '../src/inputs/Select';
 import DateTimePicker from '../src/inputs/DateTimePicker';
-import DaysTimeField from '../src/inputs/DaysTimeField';
+//import DaysTimeField from '../src/inputs/DaysTimeField';
 import PickersUtilsProvider from '../src/PickersUtilsProvider';
+import Editor from '../src/inputs/Editor';
 import MenuItem from '@material-ui/core/MenuItem';
 
 function validateForm({ firstname, data }) {
@@ -188,8 +189,11 @@ function App() {
   return (
     <Fields comp={form}>
       <div>
-        <DaysTimeField label="Daystime" name="daystime" validate={validateDaystime} />
+        <Editor name="richContent" />
       </div>
+      {/* <div>
+        <DaysTimeField label="Daystime" name="daystime" validate={validateDaystime} />
+      </div> */}
       <div>
         <Checkbox label="Cheked" name="cheked" />
       </div>
