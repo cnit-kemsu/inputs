@@ -2,10 +2,16 @@ import React, { createElement } from 'react';
 import MuiTextField from '@material-ui/core/TextField';
 import { useField } from '@kemsu/form';
 
+const TextFieldProps = {
+  handleValue(event) {
+    return event.currentTarget.value;
+  }
+};
+
 function TextField({ comp, name, validate,
   helperText, multiline, variant, margin, ...props }) {
 
-  const { value, error, touched, dirty, onChange, onBlur } = useField(comp, name, validate);
+  const { value, error, touched, dirty, onChange, onBlur } = useField(comp, name, validate, TextFieldProps);
   const showError = touched && dirty && Boolean(error);
 
   return createElement(MuiTextField, {

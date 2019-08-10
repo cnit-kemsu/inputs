@@ -1,14 +1,16 @@
 import React, { createElement } from 'react';
 import ReactDOM from 'react-dom';
+import MenuItem from '@material-ui/core/MenuItem';
 import { useForm, useComposite, useFieldArray, useFormSubscriber, Fields } from '@kemsu/form';
 import TextField from '../src/inputs/TextField';
 import Checkbox from '../src/inputs/Checkbox';
 import Select from '../src/inputs/Select';
 import DateTimePicker from '../src/inputs/DateTimePicker';
-//import DaysTimeField from '../src/inputs/DaysTimeField';
 import PickersUtilsProvider from '../src/PickersUtilsProvider';
 import Editor from '../src/inputs/Editor';
-import MenuItem from '@material-ui/core/MenuItem';
+import { deserializeDate } from '../src/lib/deserializeDate';
+import { deserializeEditorContent } from '../src/lib/deserializeEditorContent';
+import { blobs } from '@kemsu/editor';
 
 function validateForm({ firstname, data }) {
   if (firstname && data?.address?.city)
@@ -45,17 +47,6 @@ function validatePasswords(values) {
   return undefined;
 }
 
-function validateDaystime({ days, hours, minutes }) {
-  if (days === 0 && hours === 0 && minutes === 0) {
-    return 'Необходимо указать временной промежуток';
-  }
-  return undefined;
-}
-
-/**
- * 
- * @param {Date} value 
- */
 function validateDate(value) {
   if (value) {
     if (value.getFullYear() === 2019) return 'Invalid year';
@@ -95,6 +86,48 @@ function Passwords({ comp }) {
 }
 Passwords = React.memo(Passwords);
 
+// function FriendItem({ comp: friend }) {
+
+//   console.log('render Friend:', friend.index);
+  
+//   return (
+//     <div style={{ padding: '5px', margin: '5px', border: '2px solid black', width: 'fit-content' }}>
+//       <div style={{ display: 'flex' }}>
+//         <Fields comp={friend}>
+//           <TextField label="Firstname" name="firstname" />
+//           <TextField label="Lastname" name="lastname" />
+//         </Fields>
+//       </div>
+//       <button data-control onClick={friend.delete}>Delete</button>
+//     </div>
+//   );
+// }
+// FriendItem = React.memo(FriendItem);
+
+// function Friends({ comp }) {
+
+//   console.log('render Friends');
+//   const [, { map, push, error, dirty, touched, onBlur }] = useFieldArray(comp, 'friends', validateFriends);
+
+//   return (
+//     <div onBlur={onBlur} style={{ padding: '10px', border: '3px solid black', width: 'fit-content' }}>
+//       <div>
+//         touched: {touched ? 'true' : 'false'}, dirty: {dirty ? 'true' : 'false'}
+//       </div>
+//       <div>
+//         {map((key, friend) => (
+//             <Editor key={key} comp={friend} />
+//         ))}
+//       </div>
+//       {error && <div style={touched && dirty ? { color: 'red' } : {}}>{error}</div>}
+//       <div>
+//         <button data-control onClick={() => push()}>Add friend</button>
+//       </div>
+//     </div>
+//   );
+// }
+// Friends = React.memo(Friends);
+
 function FriendItem({ comp: friend }) {
 
   console.log('render Friend:', friend.index);
@@ -103,8 +136,7 @@ function FriendItem({ comp: friend }) {
     <div style={{ padding: '5px', margin: '5px', border: '2px solid black', width: 'fit-content' }}>
       <div style={{ display: 'flex' }}>
         <Fields comp={friend}>
-          <TextField label="Firstname" name="firstname" />
-          <TextField label="Lastname" name="lastname" />
+          <Editor name="content" />
         </Fields>
       </div>
       <button data-control onClick={friend.delete}>Delete</button>
@@ -116,7 +148,7 @@ FriendItem = React.memo(FriendItem);
 function Friends({ comp }) {
 
   console.log('render Friends');
-  const [, { map, push, error, dirty, touched, onBlur }] = useFieldArray(comp, 'friends', validateFriends);
+  const [, { map, push, error, dirty, touched, onBlur }] = useFieldArray(comp, 'friends');
 
   return (
     <div onBlur={onBlur} style={{ padding: '10px', border: '3px solid black', width: 'fit-content' }}>
@@ -125,7 +157,7 @@ function Friends({ comp }) {
       </div>
       <div>
         {map((key, friend) => (
-            <FriendItem key={key} comp={friend} />
+          <FriendItem key={key} comp={friend} />
         ))}
       </div>
       {error && <div style={touched && dirty ? { color: 'red' } : {}}>{error}</div>}
@@ -164,37 +196,75 @@ function SubmitErrors({ comp }) {
 }
 SubmitErrors = React.memo(SubmitErrors);
 
-async function handleSubmit(values) {
+async function handleSubmit(values, _blobs) {
   await new Promise(resolve => setTimeout(resolve, 2000));
-  console.log(values);
+  console.log('submitValues: ', values);
+  JSON.stringify(values, null, 1) |> console.log;
+  console.log('blobs:', _blobs);
+
   if (values.firstname === 'John') return 'John is invalid firstname';
 }
 
 const initValues = {
   firstname: 'John',
   friends: [
+    // {
+    //   firstname: 'John',
+    //   lastname: 'Cooper'
+    // }
     {
-      firstname: 'John',
-      lastname: 'Cooper'
+      content: {
+        blocks: [
+          {
+            key: "78qt8",
+            text: "some text!",
+            type: "unstyled",
+            depth: 0,
+            inlineStyleRanges: [],
+            entityRanges: [],
+            data: {}
+          }
+        ],
+        entityMap: {}
+      }
     }
   ],
+  // contents: [
+  //   {
+  //     blocks: [
+  //     {
+  //       key: "78qt8",
+  //       text: "some text!",
+  //       type: "unstyled",
+  //       depth: 0,
+  //       inlineStyleRanges: [],
+  //       entityRanges: [],
+  //       data: {}
+  //     }
+  //     ],
+  //     entityMap: {}
+  //   }
+  // ],
   date: '2019-06-11 15:18:00'
 };
+
+function deserialize(values) {
+  values.date = deserializeDate(values.date);
+  values.date2 = deserializeDate(values.date2);
+  values.friends[0].content = deserializeEditorContent(values.friends[0].content);
+}
 
 function App() {
 
   console.log('render App');
-  const form = useForm(handleSubmit, initValues, validateForm);
+  const form = useForm(handleSubmit, initValues, validateForm, { deserialize });
 
   return (
     <Fields comp={form}>
-      <div>
-        <Editor name="richContent" />
-      </div>
       {/* <div>
-        <DaysTimeField label="Daystime" name="daystime" validate={validateDaystime} />
+        <Editor name="contents.0" />
       </div> */}
-      <div>
+      {/* <div>
         <Checkbox label="Cheked" name="cheked" />
       </div>
       <div>
@@ -204,14 +274,14 @@ function App() {
           <MenuItem value="2">2</MenuItem>
           <MenuItem value="3">3</MenuItem>
         </Select>
-      </div>
-      <div>
+      </div> */}
+      {/* <div>
         <DateTimePicker label="Date" name="date" validate={validateDate} />
       </div>
       <div>
         <DateTimePicker label="Date 2" name="date2" validate={validateDate} />
-      </div>
-      <div>
+      </div> */}
+      {/* <div>
         <TextField label="Firstname" name="firstname" validate={validateFirstname} />
       </div>
       <div>
@@ -219,7 +289,7 @@ function App() {
       </div>
       <div>
        <Passwords />
-      </div>
+      </div> */}
       <div>
         <Friends />
       </div>

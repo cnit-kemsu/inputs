@@ -2,19 +2,20 @@ import React from 'react';
 import { KeyboardDateTimePicker } from "@material-ui/pickers";
 import { useField } from '@kemsu/form';
 
-function getDate(value) {
-  return value;
-}
-
-function deserialize(value) {
-  if (!value) return null;
-  if (!(value instanceof Date)) return new Date(value);
-  return value;
-}
+const DateTimePickerProps = {
+  serialize(value) {
+    if (value) {
+      const sv = (value.toLocaleDateString('ru').split('.') |> #.reverse().join('-'))
+        + ' ' + value.toLocaleTimeString('ru');
+      return [sv];
+    }
+    return [value];
+  }
+};
 
 function DateTimePicker({ comp, name, validate, helperText, ...props }) {
 
-  const { value, error, touched, dirty, onChange, onBlur } = useField(comp, name, validate, getDate, deserialize);
+  const { value, error, touched, dirty, onChange, onBlur } = useField(comp, name, validate, DateTimePickerProps);
   const showError = touched && dirty && Boolean(error);
 
   return <KeyboardDateTimePicker
