@@ -31,7 +31,7 @@ const EditorProps = {
 function Editor({ comp, name, validate }) {
 
   const { value, error, touched, dirty, onChange, onBlur } = useField(comp, name, validate, EditorProps);
-  console.log(value);
+  console.log(value ? convertStateToRawContent(value) : undefined);
   return createElement(DraftEditor, {
     editorState: value || createEditorStateWithContent(),
     onChange: onChange,
