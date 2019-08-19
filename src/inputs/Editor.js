@@ -1,6 +1,6 @@
 import React, { createElement } from 'react';
 import { useField } from '@kemsu/form';
-import { Editor as DraftEditor, convertStateToRawContent, createEditorStateWithContent, blobs } from '@kemsu/editor';
+import { Editor as DraftEditor, convertEditorStateToRawContent, createEditorStateFromContent, blobs } from '@kemsu/editor';
 
 function toFiles(blobUrl) {
   return blobs[blobUrl];
@@ -8,7 +8,7 @@ function toFiles(blobUrl) {
 
 const EditorProps = {
   serialize(value) {
-    const rawContent = convertStateToRawContent(value);// |> JSON.stringify |> JSON.parse;
+    const rawContent = convertEditorStateToRawContent(value);// |> JSON.stringify |> JSON.parse;
     const _blobs = [];
     for (const entity of Object.values(rawContent.entityMap)) {
       if (entity.type === 'IMAGE' && entity.data.src.substring(0, 4) === 'blob') {
@@ -23,7 +23,7 @@ const EditorProps = {
     }
     return [
       rawContent,
-      _blobs.map(toFiles)
+      _blobs.length > 0 ? _blobs.map(toFiles) : undefined
     ];
   }
 };
@@ -31,9 +31,9 @@ const EditorProps = {
 function Editor({ comp, name, validate }) {
 
   const { value, error, touched, dirty, onChange, onBlur } = useField(comp, name, validate, EditorProps);
-  //console.log(value ? convertStateToRawContent(value) : undefined);
+  //console.log(value ? convertEditorStateToRawContent(value) : undefined);
   return createElement(DraftEditor, {
-    editorState: value || createEditorStateWithContent(),
+    editorState: value || createEditorStateFromContent(),
     onChange: onChange,
     onBlur: onBlur
   });
