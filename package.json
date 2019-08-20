@@ -10,6 +10,7 @@
     "node_modules/**/*.js"
   ],
   "peerDependencies": {
+    "@kemsu/editor": "github:cnit-kemsu/editor",
     "@kemsu/form": "github:cnit-kemsu/form",
     "@kemsu/force-update": "github:cnit-kemsu/force-update",
     "@kemsu/publisher": "github:cnit-kemsu/publisher",
@@ -18,8 +19,7 @@
     "@material-ui/styles": "^4.0.1",
     "@material-ui/pickers": "^3.1.0",
     "react": "^16.8.5",
-    "react-dom": "^16.8.5",
-    "@kemsu/editor": "github:cnit-kemsu/editor"
+    "react-dom": "^16.8.5"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
@@ -35,8 +35,8 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.4.4",
     "@kemsu/editor": "github:cnit-kemsu/editor",
-    "@kemsu/force-update": "github:cnit-kemsu/force-update",
     "@kemsu/form": "github:cnit-kemsu/form",
+    "@kemsu/force-update": "github:cnit-kemsu/force-update",
     "@kemsu/publisher": "github:cnit-kemsu/publisher",
     "@material-ui/core": "^4.0.1",
     "@material-ui/icons": "^4.0.1",
