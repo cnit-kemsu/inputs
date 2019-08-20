@@ -23,7 +23,7 @@ function Select({ comp, name, validate,
       input={<FilledInput />}
       children={children}
     />
-    {showError && <FormHelperText error={showError}>{showError ? error : helperText}</FormHelperText>}
+    {(showError || helperText) && <FormHelperText error={showError}>{showError ? error : helperText}</FormHelperText>}
   </FormControl>;
 }
 

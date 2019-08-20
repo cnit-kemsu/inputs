@@ -10,7 +10,6 @@ import PickersUtilsProvider from '../src/PickersUtilsProvider';
 import Editor from '../src/inputs/Editor';
 import { deserializeDate } from '../src/lib/deserializeDate';
 import { deserializeEditorContent } from '../src/lib/deserializeEditorContent';
-import { blobs } from '@kemsu/editor';
 
 function validateForm({ firstname, data }) {
   if (firstname && data?.address?.city)
@@ -136,7 +135,7 @@ function FriendItem({ comp: friend }) {
     <div style={{ padding: '5px', margin: '5px', border: '2px solid black', width: 'fit-content' }}>
       <div style={{ display: 'flex' }}>
         <Fields comp={friend}>
-          <Editor name="content" />
+          <Editor label="Friend Description" name="content" helperText="helper text" placeholder="type here..." />
         </Fields>
       </div>
       <button data-control onClick={friend.delete}>Delete</button>
@@ -196,11 +195,10 @@ function SubmitErrors({ comp }) {
 }
 SubmitErrors = React.memo(SubmitErrors);
 
-async function handleSubmit(values, _blobs) {
+async function handleSubmit(values) {
   await new Promise(resolve => setTimeout(resolve, 2000));
   console.log('submitValues: ', values);
   JSON.stringify(values, null, 1) |> console.log;
-  console.log('blobs:', _blobs);
 
   if (values.firstname === 'John') return 'John is invalid firstname';
 }
@@ -275,12 +273,12 @@ function App() {
           <MenuItem value="3">3</MenuItem>
         </Select>
       </div> */}
-      {/* <div>
+      <div>
         <DateTimePicker label="Date" name="date" validate={validateDate} />
       </div>
       <div>
         <DateTimePicker label="Date 2" name="date2" validate={validateDate} />
-      </div> */}
+      </div>
       {/* <div>
         <TextField label="Firstname" name="firstname" validate={validateFirstname} />
       </div>

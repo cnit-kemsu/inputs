@@ -1,42 +1,41 @@
-import React, { createElement } from 'react';
+import React from 'react';
+import Typography from '@material-ui/core/Typography';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import { useField } from '@kemsu/form';
-import { Editor as DraftEditor, convertEditorStateToRawContent, createEditorStateFromContent, blobs } from '@kemsu/editor';
+import { Editor as DraftEditor, convertEditorStateToRawContent } from '@kemsu/editor';
 
-function toFiles(blobUrl) {
-  return blobs[blobUrl];
-}
 
 const EditorProps = {
   serialize(value) {
-    const rawContent = convertEditorStateToRawContent(value);// |> JSON.stringify |> JSON.parse;
-    const _blobs = [];
+    if (!value) return value;
+    const rawContent = convertEditorStateToRawContent(value);
     for (const entity of Object.values(rawContent.entityMap)) {
-      if (entity.type === 'IMAGE' && entity.data.src.substring(0, 4) === 'blob') {
+      if (entity.type === 'IMAGE') {
         const data = { ...entity.data };
-        const blobIndex = _blobs.indexOf(data.src);
-        if (blobIndex === -1) {
-          const lastBlobIndex = _blobs.push(data.src) - 1;
-          data.src = 'blob=' + lastBlobIndex;
-        } else data.src = 'blob=' + blobIndex;
+        //if (data.file) data.file = 'FILE!!!'; // DEBUG
         entity.data = data;
       }
     }
-    return [
-      rawContent,
-      _blobs.length > 0 ? _blobs.map(toFiles) : undefined
-    ];
+    return rawContent;
   }
 };
 
-function Editor({ comp, name, validate }) {
+function Editor({ comp, name, validate, label, helperText, placeholder }) {
 
   const { value, error, touched, dirty, onChange, onBlur } = useField(comp, name, validate, EditorProps);
+  const showError = touched && dirty && Boolean(error);
   //console.log(value ? convertEditorStateToRawContent(value) : undefined);
-  return createElement(DraftEditor, {
-    editorState: value || createEditorStateFromContent(),
-    onChange: onChange,
-    onBlur: onBlur
-  });
+  // return createElement(DraftEditor, {
+  //   editorState: value,
+  //   onChange: onChange,
+  //   onBlur: onBlur
+  // });
+  return <div>
+    {label !== undefined && <Typography>{label}</Typography>}
+    <DraftEditor {...{ editorState: value, onChange, placeholder, onBlur }}
+    />
+    {(showError || helperText) && <FormHelperText error={showError}>{showError ? error : helperText}</FormHelperText>}
+  </div>;
 }
 
 export default React.memo(Editor);
