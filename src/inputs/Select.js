@@ -6,14 +6,16 @@ import FormControl from '@material-ui/core/FormControl';
 import MuiSelect from '@material-ui/core/Select';
 import { useField } from '@kemsu/form';
 
-function getValue(event) {
-  return event.target.value;
-}
+const SelectProps = {
+  handleValue(event) {
+    return event.target.value;
+  }
+};
 
 function Select({ comp, name, validate,
   helperText, variant, margin, children, label, ...props }) {
 
-  const { value, error, touched, dirty, onChange, onBlur } = useField(comp, name, validate, getValue);
+  const { value, error, touched, dirty, onChange, onBlur } = useField(comp, name, validate, SelectProps);
   const showError = touched && dirty && Boolean(error);
 
   return <FormControl error={showError} variant={variant || 'filled'} onBlur={onBlur} margin={margin || 'dense'} {...props}>
@@ -28,5 +30,3 @@ function Select({ comp, name, validate,
 }
 
 export default React.memo(Select);
-
-
