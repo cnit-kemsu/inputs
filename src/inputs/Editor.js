@@ -20,7 +20,7 @@ const EditorProps = {
   }
 };
 
-function Editor({ comp, name, validate, label, helperText, placeholder }) {
+function Editor({ comp, name, validate, label, helperText, placeholder, ...props }) {
 
   const { value, error, touched, dirty, onChange, onBlur } = useField(comp, name, validate, EditorProps);
   const showError = touched && dirty && Boolean(error);
@@ -30,7 +30,7 @@ function Editor({ comp, name, validate, label, helperText, placeholder }) {
   //   onChange: onChange,
   //   onBlur: onBlur
   // });
-  return <div>
+  return <div {...props}>
     {label !== undefined && <Typography>{label}</Typography>}
     <DraftEditor {...{ editorState: value, onChange, placeholder, onBlur }}
     />
