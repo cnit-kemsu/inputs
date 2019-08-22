@@ -14,7 +14,7 @@ function TextFieldProps(type) {
 function TextField({ comp, name, validate,
   helperText, multiline, variant, margin, type, ...props }) {
 
-  const { value, error, touched, dirty, onChange, onBlur } = useField(comp, name, validate, TextFieldProps);
+  const { value, error, touched, dirty, onChange, onBlur } = useField(comp, name, validate, TextFieldProps(type));
   const showError = touched && dirty && Boolean(error);
 
   return createElement(MuiTextField, {
