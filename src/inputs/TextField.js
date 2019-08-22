@@ -2,14 +2,17 @@ import React, { createElement } from 'react';
 import MuiTextField from '@material-ui/core/TextField';
 import { useField } from '@kemsu/form';
 
-const TextFieldProps = {
-  handleValue(event) {
-    return event.currentTarget.value;
-  }
-};
+function TextFieldProps(type) {
+  return {
+    handleValue(event) {
+      if (type === 'number') return Number(event.currentTarget.value);
+      return event.currentTarget.value;
+    }
+  };
+}
 
 function TextField({ comp, name, validate,
-  helperText, multiline, variant, margin, ...props }) {
+  helperText, multiline, variant, margin, type, ...props }) {
 
   const { value, error, touched, dirty, onChange, onBlur } = useField(comp, name, validate, TextFieldProps);
   const showError = touched && dirty && Boolean(error);
@@ -23,6 +26,7 @@ function TextField({ comp, name, validate,
     multiline: multiline,
     variant: variant || multiline ? 'outlined' : 'filled',
     margin: margin || 'dense',
+    type,
     ...props
   });
 }
