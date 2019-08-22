@@ -5,7 +5,7 @@ import { useField } from '@kemsu/form';
 function TextFieldProps(type) {
   return {
     handleValue(event) {
-      if (type === 'number') return Number(event.currentTarget.value);
+      if (type === 'number' && event.currentTarget.value) return Number(event.currentTarget.value);
       return event.currentTarget.value;
     }
   };
@@ -18,7 +18,7 @@ function TextField({ comp, name, validate,
   const showError = touched && dirty && Boolean(error);
 
   return createElement(MuiTextField, {
-    value: value || '',
+    value: value == null ? '' : value,
     onChange: onChange,
     onBlur: onBlur,
     error: showError,
