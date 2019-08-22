@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import Typography from '@material-ui/core/Typography';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
 import ImageIcon from '@material-ui/icons/Image';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
@@ -52,9 +51,13 @@ class DragAndDropImageDialog extends PureComponent {
 
   assignSrc() {
     const { value } = this.props;
-    if (this.file !== value) {
+    if (!(value instanceof File)) {
+      if (value && value instanceof Object) this.src = '/files/' + value.fileSourceKey;
+      else this.src = null;
+      this.file = null;
+    } else if (this.file !== value) {
       this.file = value;
-      this.src = value ? URL.createObjectURL(value) : null;
+      this.src = URL.createObjectURL(value);
     }
   }
 
@@ -112,7 +115,7 @@ class DragAndDropImageDialog extends PureComponent {
   clear(event) {    
     event.preventDefault();
     event.stopPropagation(); // TODO: check if needed
-    this.props.onChange?.(this.file ? null : undefined);
+    this.props.onChange?.(this.src ? null : undefined);
   }
   
 
