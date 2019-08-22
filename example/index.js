@@ -8,6 +8,7 @@ import Select from '../src/inputs/Select';
 import DateTimePicker from '../src/inputs/DateTimePicker';
 import PickersUtilsProvider from '../src/PickersUtilsProvider';
 import Editor from '../src/inputs/Editor';
+import DragAndDropImageDialog from '../src/inputs/DragAndDropImageDialog';
 import { deserializeDate } from '../src/lib/deserializeDate';
 import { deserializeEditorContent } from '../src/lib/deserializeEditorContent';
 
@@ -273,12 +274,12 @@ function App() {
           <MenuItem value="3">3</MenuItem>
         </Select>
       </div> */}
-      <div>
+      {/* <div>
         <DateTimePicker label="Date" name="date" validate={validateDate} />
       </div>
       <div>
         <DateTimePicker label="Date 2" name="date2" validate={validateDate} />
-      </div>
+      </div> */}
       {/* <div>
         <TextField label="Firstname" name="firstname" validate={validateFirstname} />
       </div>
@@ -288,9 +289,10 @@ function App() {
       <div>
        <Passwords />
       </div> */}
-      <div>
+      {/* <div>
         <Friends />
-      </div>
+      </div> */}
+      <DragAndDropImageDialog label="Picture" style={{ width: "300px" }} name="picture" />
       <div>
         <SubmitErrors />
       </div>
