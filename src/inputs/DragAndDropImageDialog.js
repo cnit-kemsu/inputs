@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import Typography from '@material-ui/core/Typography';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
 import ImageIcon from '@material-ui/icons/Image';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
@@ -51,14 +52,28 @@ class DragAndDropImageDialog extends PureComponent {
 
   assignSrc() {
     const { value } = this.props;
-    if (!(value instanceof File)) {
-      if (value && value instanceof Object) this.src = '/files/' + value.fileSourceKey;
-      else this.src = null;
+    if (value) {
+      const { file, fileSourceKey } = value;
+      if (file && this.file !== file) {
+        this.file = file;
+        this.src = URL.createObjectURL(file);
+      }
+      if (fileSourceKey) {
+        this.src = '/files/' + fileSourceKey;
+        this.file = null;
+      }
+    } else {
+      this.src = null;
       this.file = null;
-    } else if (this.file !== value) {
-      this.file = value;
-      this.src = URL.createObjectURL(value);
     }
+    // if (!(value instanceof File)) {
+    //   if (value && value instanceof Object) this.src = '/files/' + value.fileSourceKey;
+    //   else this.src = null;
+    //   this.file = null;
+    // } else if (this.file !== value) {
+    //   this.file = value;
+    //   this.src = URL.createObjectURL(value);
+    // }
   }
 
   handleMouseEnter(event) {
@@ -83,7 +98,7 @@ class DragAndDropImageDialog extends PureComponent {
     event.preventDefault();
     const file = event.currentTarget.files[0];
     if (!file || !imageTypes.includes(file.type)) return;
-    this.props.onChange?.(file);
+    this.props.onChange?.({ file });
   }
 
   handleDragEnter(event) {
@@ -109,12 +124,13 @@ class DragAndDropImageDialog extends PureComponent {
     if (this.state.onMouseOver) this.setState({ onMouseOver: false });
     const file = event.dataTransfer.files[0];
     if (!file || !imageTypes.includes(file.type)) return;
-    this.props.onChange?.(file);
+    this.props.onChange?.({ file });
   }
 
   clear(event) {    
     event.preventDefault();
     event.stopPropagation(); // TODO: check if needed
+    this.fileDialog.value = '';
     this.props.onChange?.(this.src ? null : undefined);
   }
   
