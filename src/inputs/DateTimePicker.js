@@ -1,5 +1,5 @@
 import React from 'react';
-import { KeyboardDateTimePicker } from "@material-ui/pickers";
+import { KeyboardDateTimePicker, KeyboardDatePicker } from "@material-ui/pickers";
 import { useField } from '@kemsu/form';
 
 const DateTimePickerProps = {
@@ -7,20 +7,20 @@ const DateTimePickerProps = {
     if (value) {
       const sv = (value.toLocaleDateString('ru').split('.') |> #.reverse().join('-'))
         + ' ' + value.toLocaleTimeString('ru');
-      return [sv];
+      return sv;
     }
-    return [value];
+    return value;
   }
 };
 
-function DateTimePicker({ comp, name, validate, helperText, ...props }) {
+function DateTimePicker({ comp, name, validate, helperText, format, ...props }) {
 
   const { value, error, touched, dirty, onChange, onBlur } = useField(comp, name, validate, DateTimePickerProps);
   const showError = touched && dirty && Boolean(error);
 
-  return <KeyboardDateTimePicker
+  return <KeyboardDatePicker
     {...{
-      value,
+      value: value || null,
       onChange,
       onBlur,
       error: showError,
@@ -28,7 +28,8 @@ function DateTimePicker({ comp, name, validate, helperText, ...props }) {
     }}
     variant="inline"
     ampm={false}
-    format="dd/MM/yyyy HH:mm"
+    //format="dd/MM/yyyy HH:mm"
+    format={format || "dd/MM/yyyy"}
     {...props}
   />;
 }
