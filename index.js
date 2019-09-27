@@ -7,3 +7,4 @@ export { default as DragAndDropImageDialog }  from './src/inputs/DragAndDropImag
 export { default as PickersUtilsProvider }  from './src/PickersUtilsProvider';
 export { deserializeDate } from './src/lib/deserializeDate';
 export { deserializeEditorContent } from './src/lib/deserializeEditorContent';
+export { default as ArrayCheckbox }  from './src/inputs/ArrayCheckbox';
