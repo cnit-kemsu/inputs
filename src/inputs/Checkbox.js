@@ -4,7 +4,7 @@ import { useField } from '@kemsu/form';
 
 const CheckboxProps = {
   handleValue(event) {
-    return event.target.checked;;
+    return event.target.checked;
   }
 };
 
