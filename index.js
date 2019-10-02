@@ -4,6 +4,7 @@ export { default as Select }  from './src/inputs/Select';
 export { default as DateTimePicker }  from './src/inputs/DateTimePicker';
 export { default as Editor }  from './src/inputs/Editor';
 export { default as DragAndDropImageDialog }  from './src/inputs/DragAndDropImageDialog';
+export { default as DragAndDropPDFDialog }  from './src/inputs/DragAndDropPDFDialog';
 export { default as PickersUtilsProvider }  from './src/PickersUtilsProvider';
 export { deserializeDate } from './src/lib/deserializeDate';
 export { deserializeEditorContent } from './src/lib/deserializeEditorContent';

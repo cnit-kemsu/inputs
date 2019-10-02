@@ -12,6 +12,7 @@ import DragAndDropImageDialog from '../src/inputs/DragAndDropImageDialog';
 import { deserializeDate } from '../src/lib/deserializeDate';
 import { deserializeEditorContent } from '../src/lib/deserializeEditorContent';
 import ArrayCheckbox from '../src/inputs/ArrayCheckbox';
+import DragAndDropPDFDialog from '../src/inputs/DragAndDropPDFDialog';
 
 function validateForm({ firstname, data }) {
   if (firstname && data?.address?.city)
@@ -293,7 +294,8 @@ function App() {
       {/* <div>
         <Friends />
       </div> */}
-      <DragAndDropImageDialog label="Picture" style={{ width: "300px" }} name="picture" />
+      {/* <DragAndDropImageDialog label="Picture" style={{ width: "300px" }} name="picture" /> */}
+      <DragAndDropPDFDialog label="Document" style={{ width: "300px" }} name="Document" />
       <div>
         <SubmitErrors />
       </div>
@@ -302,11 +304,11 @@ function App() {
         <SubmitButton style={{ margin: '5px' }} />
       </div>
 
-      <div>
+      {/* <div>
         <ArrayCheckbox name="reply" arrayValue="5" />
         <ArrayCheckbox name="reply" arrayValue="abc" />
         <ArrayCheckbox name="reply" arrayValue={7} />
-      </div>
+      </div> */}
 
     </Fields>
   );
