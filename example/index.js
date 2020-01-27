@@ -12,18 +12,20 @@ import DragAndDropImageDialog from '../src/inputs/DragAndDropImageDialog';
 import { deserializeDate } from '../src/lib/deserializeDate';
 import { deserializeEditorContent } from '../src/lib/deserializeEditorContent';
 import ArrayCheckbox from '../src/inputs/ArrayCheckbox';
+import{ RadioButtonGroup, RadioButton } from '../src/inputs/RadioButtons';
 import DragAndDropPDFDialog from '../src/inputs/DragAndDropPDFDialog';
 
-function validateForm({ firstname, data }) {
-  if (firstname && data?.address?.city)
-  if (firstname === data.address.city) return {
-    firstname: 'Firstname must be distinct from city',
-    data: {
-      address: {
-        city: 'City must be distinct from firstname'
-      }
-    }
-  };
+function validateForm(values) {
+  console.log(values);
+  // if (firstname && data?.address?.city)
+  // if (firstname === data.address.city) return {
+  //   firstname: 'Firstname must be distinct from city',
+  //   data: {
+  //     address: {
+  //       city: 'City must be distinct from firstname'
+  //     }
+  //   }
+  // };
   return undefined;
 }
 
@@ -282,7 +284,7 @@ function App() {
       <div>
         <DateTimePicker label="Date 2" name="date2" validate={validateDate} />
       </div> */}
-      {/* <div>
+      <div>
         <TextField label="Firstname" name="firstname" validate={validateFirstname} />
       </div>
       <div>
@@ -290,7 +292,7 @@ function App() {
       </div>
       <div>
        <Passwords />
-      </div> */}
+      </div>
       {/* <div>
         <Friends />
       </div> */}
@@ -304,11 +306,13 @@ function App() {
         <SubmitButton style={{ margin: '5px' }} />
       </div>
 
-      {/* <div>
-        <ArrayCheckbox name="reply" arrayValue="5" />
-        <ArrayCheckbox name="reply" arrayValue="abc" />
-        <ArrayCheckbox name="reply" arrayValue={7} />
-      </div> */}
+      <div>
+        <RadioButtonGroup name="reply">
+          <RadioButton value="5" label="5" />
+          <RadioButton value="abc" label="abc" />
+          <RadioButton value="7" label="7" />
+        </RadioButtonGroup>
+      </div>
 
     </Fields>
   );
