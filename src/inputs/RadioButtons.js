@@ -19,7 +19,7 @@ function RadioButtonGroup({ comp, name, children, validate, helperText, ...props
   const showError = touched && dirty && Boolean(error);
 
   return <FormControl component="fieldset" {...props}>
-    <RadioGroup name={name} value={value} onChange={onChange} onBlur={onBlur}>
+    <RadioGroup name={name} value={value || ''} onChange={onChange} onBlur={onBlur}>
       {children}
     </RadioGroup>
     {(showError || helperText) && <FormHelperText error={showError}>{showError ? error : helperText}</FormHelperText>}
