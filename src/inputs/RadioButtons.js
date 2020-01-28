@@ -18,8 +18,8 @@ function RadioButtonGroup({ comp, name, children, validate, helperText, ...props
   const { onChange, onBlur, error, touched, dirty, } = useField(comp, name, validate, RadioButtonGroupProps);
   const showError = touched && dirty && Boolean(error);
 
-  return <FormControl component="fieldset">
-    <RadioGroup name={name} onChange={onChange} onBlur={onBlur} {...props}>
+  return <FormControl component="fieldset" {...props}>
+    <RadioGroup name={name} onChange={onChange} onBlur={onBlur}>
       {children}
     </RadioGroup>
     {(showError || helperText) && <FormHelperText error={showError}>{showError ? error : helperText}</FormHelperText>}
