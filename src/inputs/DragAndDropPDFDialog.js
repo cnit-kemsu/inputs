@@ -178,12 +178,12 @@ const SelectProps = {
 };
 
 function DragAndDropPDFDialogInput({ comp, name, validate,
-  helperText, label, ...props }) {
+  helperText, label, style, ...props }) {
 
   const { value, error, touched, dirty, onChange, onBlur } = useField(comp, name, validate, SelectProps);
   const showError = touched && dirty && Boolean(error);
 
-  return <div onBlur={onBlur} {...props}>
+  return <div onBlur={onBlur} style={{ maxWidth: '400px', maxHeight: '400px', display: 'inline-block', ...style }} {...props}>
     <DragAndDropPDFDialog {...{ value, onChange, label }} />
     {(showError || helperText) && <FormHelperText error={showError}>{showError ? error : helperText}</FormHelperText>}
   </div>;

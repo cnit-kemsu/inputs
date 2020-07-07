@@ -9,45 +9,15 @@ import DateTimePicker from '../src/inputs/DateTimePicker';
 import PickersUtilsProvider from '../src/PickersUtilsProvider';
 import Editor from '../src/inputs/Editor';
 import DragAndDropImageDialog from '../src/inputs/DragAndDropImageDialog';
-import { deserializeDate } from '../src/lib/deserializeDate';
-import { deserializeEditorContent } from '../src/lib/deserializeEditorContent';
+import { deserializeDate } from '../src/deserializeDate';
+import { deserializeEditorContent } from '../src/deserializeEditorContent';
 import ArrayCheckbox from '../src/inputs/ArrayCheckbox';
 import{ RadioButtonGroup, RadioButton } from '../src/inputs/RadioButtons';
 import DragAndDropPDFDialog from '../src/inputs/DragAndDropPDFDialog';
 
-function validateForm(values) {
-  console.log(values);
-  // if (firstname && data?.address?.city)
-  // if (firstname === data.address.city) return {
-  //   firstname: 'Firstname must be distinct from city',
-  //   data: {
-  //     address: {
-  //       city: 'City must be distinct from firstname'
-  //     }
-  //   }
-  // };
-  return undefined;
-}
-
 function validateFirstname(value) {
   if (!value) return 'Firstname must be defined';
   if (value && value.split(' ').length > 1) return 'Firstname must contain one word';
-  return undefined;
-}
-
-function validateCity(value) {
-  if (!value) return 'City must be defined';
-  return undefined;
-}
-
-function validatePasswords(values) {
-  if (values) {
-    const { password, confirmPassword } = values;
-    if (password !== confirmPassword) return [
-      undefined,
-      'Passwords must be identical'
-    ];
-  }
   return undefined;
 }
 
@@ -58,136 +28,21 @@ function validateDate(value) {
   return undefined;
 }
 
-function validatePassword(password) {
-  if (password && password.length < 5) return 'Password must contain more than 5 characters';
-  return undefined;
-}
-
-function validateFriends(friends) {
-  if (friends?.length < 2) return [undefined, 'There must be at least 2 friends'];
-  return undefined; 
-}
-
-function Passwords({ comp }) {
-
-  console.log('render Passwords');
-  const [passwords, { error, touched, dirty, onBlur }] = useComposite(comp, 'data.passwords', validatePasswords);
-
-  return (
-    <div onBlur={onBlur} style={{ padding: '5px', margin: '5px', width: 'fit-content', border: '2px solid black' }}>
-      <div>
-        touched: {touched ? 'true' : 'false'}, dirty: {dirty ? 'true' : 'false'}
-      </div>
-      <div>
-        <TextField comp={passwords} label="Password" name="password" validate={validatePassword}/>
-        <TextField comp={passwords} label="Confirm password" name="confirmPassword" />
-      </div>
-      <div>
-        {error && <div style={touched && dirty ? { color: 'red' } : {}}>{error}</div>}
-      </div>
-    </div>
-  );
-}
-Passwords = React.memo(Passwords);
-
-// function FriendItem({ comp: friend }) {
-
-//   console.log('render Friend:', friend.index);
-  
-//   return (
-//     <div style={{ padding: '5px', margin: '5px', border: '2px solid black', width: 'fit-content' }}>
-//       <div style={{ display: 'flex' }}>
-//         <Fields comp={friend}>
-//           <TextField label="Firstname" name="firstname" />
-//           <TextField label="Lastname" name="lastname" />
-//         </Fields>
-//       </div>
-//       <button data-control onClick={friend.delete}>Delete</button>
-//     </div>
-//   );
-// }
-// FriendItem = React.memo(FriendItem);
-
-// function Friends({ comp }) {
-
-//   console.log('render Friends');
-//   const [, { map, push, error, dirty, touched, onBlur }] = useFieldArray(comp, 'friends', validateFriends);
-
-//   return (
-//     <div onBlur={onBlur} style={{ padding: '10px', border: '3px solid black', width: 'fit-content' }}>
-//       <div>
-//         touched: {touched ? 'true' : 'false'}, dirty: {dirty ? 'true' : 'false'}
-//       </div>
-//       <div>
-//         {map((key, friend) => (
-//             <Editor key={key} comp={friend} />
-//         ))}
-//       </div>
-//       {error && <div style={touched && dirty ? { color: 'red' } : {}}>{error}</div>}
-//       <div>
-//         <button data-control onClick={() => push()}>Add friend</button>
-//       </div>
-//     </div>
-//   );
-// }
-// Friends = React.memo(Friends);
-
-function FriendItem({ comp: friend }) {
-
-  console.log('render Friend:', friend.index);
-  
-  return (
-    <div style={{ padding: '5px', margin: '5px', border: '2px solid black', width: 'fit-content' }}>
-      <div style={{ display: 'flex' }}>
-        <Fields comp={friend}>
-          <Editor label="Friend Description" name="content" helperText="helper text" placeholder="type here..." />
-        </Fields>
-      </div>
-      <button data-control onClick={friend.delete}>Delete</button>
-    </div>
-  );
-}
-FriendItem = React.memo(FriendItem);
-
-function Friends({ comp }) {
-
-  console.log('render Friends');
-  const [, { map, push, error, dirty, touched, onBlur }] = useFieldArray(comp, 'friends');
-
-  return (
-    <div onBlur={onBlur} style={{ padding: '10px', border: '3px solid black', width: 'fit-content' }}>
-      <div>
-        touched: {touched ? 'true' : 'false'}, dirty: {dirty ? 'true' : 'false'}
-      </div>
-      <div>
-        {map((key, friend) => (
-          <FriendItem key={key} comp={friend} />
-        ))}
-      </div>
-      {error && <div style={touched && dirty ? { color: 'red' } : {}}>{error}</div>}
-      <div>
-        <button data-control onClick={() => push()}>Add friend</button>
-      </div>
-    </div>
-  );
-}
-Friends = React.memo(Friends);
-
-function ResetButton({ comp }) {
+function ResetButton({ comp, style }) {
 
   console.log('render ResetButton');
   const { dirty, reset } = useFormSubscriber(comp);
   
-  return <button data-control disabled={!dirty} onClick={reset}>Reset</button>;
+  return <button data-control disabled={!dirty} onClick={reset} style={style}>Reset</button>;
 }
 ResetButton = React.memo(ResetButton);
 
-function SubmitButton({ comp }) {
+function SubmitButton({ comp, style }) {
 
   console.log('render SubmitButton');
   const { hasErrors, touched, submit } = useFormSubscriber(comp);
   
-  return <button data-control disabled={hasErrors && touched} onClick={submit}>Submit</button>;
+  return <button data-control disabled={hasErrors && touched} onClick={submit} style={style}>Submit</button>;
 }
 SubmitButton = React.memo(SubmitButton);
 
@@ -209,109 +64,103 @@ async function handleSubmit(values) {
 }
 
 const initValues = {
-  firstname: 'John',
-  friends: [
-    // {
-    //   firstname: 'John',
-    //   lastname: 'Cooper'
-    // }
-    {
-      content: {
-        blocks: [
-          {
-            key: "78qt8",
-            text: "some text!",
-            type: "unstyled",
-            depth: 0,
-            inlineStyleRanges: [],
-            entityRanges: [],
-            data: {}
-          }
-        ],
-        entityMap: {}
+
+  richtext: {
+    blocks: [
+      {
+        key: "78qt8",
+        text: "some text!",
+        type: "unstyled",
+        depth: 0,
+        inlineStyleRanges: [],
+        entityRanges: [],
+        data: {}
       }
-    }
-  ],
-  // contents: [
-  //   {
-  //     blocks: [
-  //     {
-  //       key: "78qt8",
-  //       text: "some text!",
-  //       type: "unstyled",
-  //       depth: 0,
-  //       inlineStyleRanges: [],
-  //       entityRanges: [],
-  //       data: {}
-  //     }
-  //     ],
-  //     entityMap: {}
-  //   }
-  // ],
-  date: '2019-06-11 15:18:00'
+    ],
+    entityMap: {}
+  },
+
+  firstname: 'John',
+
+  date1: '2019-06-11 15:18:00'
 };
 
 function deserialize(values) {
-  values.date = deserializeDate(values.date);
+  values.date1 = deserializeDate(values.date1);
   values.date2 = deserializeDate(values.date2);
-  values.friends[0].content = deserializeEditorContent(values.friends[0].content);
+  values.richtext = deserializeEditorContent(values.richtext);
 }
 
 function App() {
 
   console.log('render App');
-  const form = useForm(handleSubmit, initValues, validateForm, { deserialize });
+  const form = useForm(handleSubmit, initValues, null, { deserialize });
 
   return (
     <Fields comp={form}>
-      {/* <div>
-        <Editor name="contents.0" />
-      </div> */}
-      {/* <div>
-        <Checkbox label="Cheked" name="cheked" />
-      </div>
+
       <div>
-        <Select label="Select" name="select">
-          <MenuItem value="">Не выбрано</MenuItem>
-          <MenuItem value="1">1</MenuItem>
-          <MenuItem value="2">2</MenuItem>
-          <MenuItem value="3">3</MenuItem>
-        </Select>
-      </div> */}
-      {/* <div>
-        <DateTimePicker label="Date" name="date" validate={validateDate} />
-      </div>
-      <div>
-        <DateTimePicker label="Date 2" name="date2" validate={validateDate} />
-      </div> */}
-      <div>
-        <TextField label="Firstname" name="firstname" validate={validateFirstname} />
-      </div>
-      <div>
-        <TextField label="City" name="data.address.city" validate={validateCity}/>
-      </div>
-      <div>
-       <Passwords />
-      </div>
-      {/* <div>
-        <Friends />
-      </div> */}
-      {/* <DragAndDropImageDialog label="Picture" style={{ width: "300px" }} name="picture" /> */}
-      <DragAndDropPDFDialog label="Document" style={{ width: "300px" }} name="Document" />
-      <div>
-        <SubmitErrors />
-      </div>
-      <div style={{ display: 'flex', padding: '10px' }}>
-        <ResetButton style={{ margin: '5px' }} />
-        <SubmitButton style={{ margin: '5px' }} />
+        <h3>Editor</h3>
+        <Editor name="richtext" style={{ maxWidth: '600px' }} />
       </div>
 
       <div>
+        <h3>Checkbox</h3>
+        <Checkbox label="Cheked" name="cheked" />
+      </div>
+
+      <div>
+        <h3>Select</h3>
+        <Select label="Select option" name="selected" style={{ width: '200px' }}>
+          <MenuItem value="">Not selected</MenuItem>
+          <MenuItem value="1">option 1</MenuItem>
+          <MenuItem value="2">option 2</MenuItem>
+          <MenuItem value="3">option 3</MenuItem>
+        </Select>
+      </div>
+
+      <div>
+        <h3>DateTimePicker</h3>
+        <DateTimePicker label="Date 1" name="date1" validate={validateDate} />
+        <DateTimePicker label="Date 2" name="date2" validate={validateDate} style={{marginLeft: '8px' }} />
+      </div>
+
+      <div>
+        <h3>TextField</h3>
+        <TextField label="Firstname" name="firstname" validate={validateFirstname} />
+      </div>
+
+      <div>
+        <h3>DragAndDropFileDialog</h3>
+        <DragAndDropImageDialog label="Picture" style={{ width: "300px" }} name="picture" style={{ width: '200px', height: '200px' }} />
+        <DragAndDropPDFDialog label="Document" style={{ width: "300px" }} name="document" style={{ width: '200px', height: '200px', marginLeft: '20px' }} />
+      </div>
+
+      <div>
+        <h3>RadioButtonGroup</h3>
         <RadioButtonGroup name="reply">
-          <RadioButton value="5" label="5" />
-          <RadioButton value="abc" label="abc" />
-          <RadioButton value="7" label="7" />
+          <RadioButton value="1" label="1" />
+          <RadioButton value="2" label="2" />
+          <RadioButton value="3" label="3" />
         </RadioButtonGroup>
+      </div>
+
+      <div>
+        <h3>ArrayCheckbox</h3>
+        <ArrayCheckbox name="array" arrayValue="a" label="1" />
+        <ArrayCheckbox name="array" arrayValue="b" label="b" />
+        <ArrayCheckbox name="array" arrayValue="c" label="c" />
+      </div>
+
+      <br />
+
+      <div>
+        <SubmitErrors />
+      </div>
+
+      <div>
+        <ResetButton />
+        <SubmitButton style={{ marginLeft: '4px' }} />
       </div>
 
     </Fields>
