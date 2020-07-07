@@ -2,18 +2,18 @@ import React, { createElement } from 'react';
 import ReactDOM from 'react-dom';
 import MenuItem from '@material-ui/core/MenuItem';
 import { useForm, useComposite, useFieldArray, useFormSubscriber, Fields } from '@kemsu/form';
-import TextField from '../src/inputs/TextField';
-import Checkbox from '../src/inputs/Checkbox';
-import Select from '../src/inputs/Select';
-import DateTimePicker from '../src/inputs/DateTimePicker';
+import TextField from '../src/components/TextField';
+import Checkbox from '../src/components/Checkbox';
+import Select from '../src/components/Select';
+import DateTimePicker from '../src/components/DateTimePicker';
 import PickersUtilsProvider from '../src/PickersUtilsProvider';
-import Editor from '../src/inputs/Editor';
-import DragAndDropImageDialog from '../src/inputs/DragAndDropImageDialog';
+import Editor from '../src/components/Editor';
+import DragAndDropImageDialog from '../src/components/DragAndDropImageDialog';
 import { deserializeDate } from '../src/deserializeDate';
 import { deserializeEditorContent } from '../src/deserializeEditorContent';
-import ArrayCheckbox from '../src/inputs/ArrayCheckbox';
-import{ RadioButtonGroup, RadioButton } from '../src/inputs/RadioButtons';
-import DragAndDropPDFDialog from '../src/inputs/DragAndDropPDFDialog';
+import ArrayCheckbox from '../src/components/ArrayCheckbox';
+import{ RadioButtonGroup, RadioButton } from '../src/components/RadioButtons';
+import DragAndDropPDFDialog from '../src/components/DragAndDropPDFDialog';
 
 function validateFirstname(value) {
   if (!value) return 'Firstname must be defined';
